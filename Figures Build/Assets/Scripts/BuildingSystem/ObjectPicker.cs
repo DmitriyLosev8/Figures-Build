@@ -10,6 +10,7 @@ namespace Assets.Scripts.BuildingSystem
         [SerializeField] private Transform _spotOfObject;
 
         private PlayerInput _playerInput;
+        private bool _canTake;
 
         public event Action ObjectPicked;
 
@@ -43,10 +44,16 @@ namespace Assets.Scripts.BuildingSystem
                     return;
                 else
                 {
-                    CurrentPickingObject = pickingObject;
-                    CurrentPickingObject.TakeParent(_spotOfObject);
-                    ObjectPicked?.Invoke();
-                    IsPicked = true;
+                    _canTake = pickingObject.ChekUpperObject();
+
+                    if (_canTake)
+                    {
+                        CurrentPickingObject = pickingObject;
+                        CurrentPickingObject.TakeParent(_spotOfObject);
+                        ObjectPicked?.Invoke();
+                        IsPicked = true;
+                    }
+                    
                 }
             }
         }

@@ -26,9 +26,7 @@ namespace Assets.Scripts.FiniteStateMachineComponents
             var type = typeof(T);
 
             if (CurrentState != null && CurrentState.GetType() == type)
-            {
                 return;
-            }
 
             if (_states.TryGetValue(type, out var newState))
             {

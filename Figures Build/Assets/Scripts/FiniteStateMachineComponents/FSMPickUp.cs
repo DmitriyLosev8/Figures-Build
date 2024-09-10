@@ -1,6 +1,5 @@
 using Assets.Scripts.BuildingSystem;
 
-
 namespace Assets.Scripts.FiniteStateMachineComponents
 {
     internal class FSMPickUp : FSMState

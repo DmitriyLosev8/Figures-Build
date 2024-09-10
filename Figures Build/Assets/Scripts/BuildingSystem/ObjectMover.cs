@@ -12,7 +12,7 @@ namespace Assets.Scripts.BuildingSystem
         private Transform _spotOfObject;
         private PickingObject _object;
         private PlayerInput _playerInput;
-        private bool _isObjectSeted = false;
+        private bool _isObjectSeted = false; 
         private float valueOfRotate = 45;
         private float _timeToTranslate = 6;
 
@@ -36,12 +36,12 @@ namespace Assets.Scripts.BuildingSystem
             _playerInput.Disable();
         }
 
-        public void StartMove(PickingObject currentObject, Transform spot)
+        public void StartMove(PickingObject currentObject, Transform parent)
         {
             _isObjectSeted = false;
 
             if (currentObject != null)
-                StartCoroutine(Move(currentObject, spot));
+                StartCoroutine(Move(currentObject, parent));
         }
       
         public void StoptMove()
@@ -50,46 +50,18 @@ namespace Assets.Scripts.BuildingSystem
             StopCoroutine(Move(_object, _spotOfObject));
         }
 
-        private IEnumerator Move(PickingObject currentObject, Transform spotOfObject)
+        private IEnumerator Move(PickingObject currentObject, Transform parent)
         {
             _object = currentObject;
-            _spotOfObject = spotOfObject;
+            _spotOfObject = parent;
 
             while (!_isObjectSeted)
-            {
-               
-                if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hitInfo, _setUpDistance))   //Raycast
-                {                  
-                    //if(hitInfo.collider.gameObject.layer == 0)
-                    //    _object.TakeParent(_spotOfObject);
-                    //else
-                        _object.ChangePosition(_spotOfObject, hitInfo, _timeToTranslate);
-                    
-                }
+            {  
+                if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hitInfo, _setUpDistance))                  
+                    _object.ChangePosition(_spotOfObject, hitInfo, _timeToTranslate);
                 else
-                {
                     _object.TakeParent(_spotOfObject);
-                }
 
-
-
-                //if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hitInfo, _setUpDistance))
-                //{
-                //    if (hitInfo.transform.TryGetComponent(out Ground ground))
-                //    {
-                //        _object.ChangePosition(hitInfo, _timeToTranslate);
-                //        //_object.transform.parent = null;
-                //        //_object.transform.position = Vector3.Lerp(_object.transform.position, hitInfo.point, _timeToTranslate * Time.deltaTime);
-                //    }
-                //    else if (hitInfo.transform.TryGetComponent(out PickingObject pickingObject) == false)
-                //    {
-                //        _object.TakeParent(_spotOfObject);
-                //    }
-                //}
-                //else
-                //{
-                //    _object.TakeParent(_spotOfObject);
-                //}
                 yield return null;
             }
         }
@@ -121,12 +93,6 @@ namespace Assets.Scripts.BuildingSystem
                     ObjectSeted?.Invoke();
                 }
             }
-        }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(transform.position, transform.forward * _setUpDistance);
         }
     }
 }
